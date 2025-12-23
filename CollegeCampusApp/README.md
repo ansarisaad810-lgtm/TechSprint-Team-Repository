@@ -16,7 +16,9 @@ This is a mobile app designed to enhance college campus management and student c
 ## Setup
 1. Follow `backend/.env.example` for environment variables.  
 2. Run `init_db.py` to initialize the database.  
-3. Use Cordova to build the frontend for Android.  
+3. Use Cordova to build the frontend for Android.
+4. Activate the venv and install the requirement.txt  
 
 ## Contributors
 - Your Name
+
