@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: #1a1f35;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .logo-text {
+                display: inline;
+            }
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            text-align: right;
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .user-info {
+                display: block;
+            }
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: white;
+            font-size: 0.875rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span {
+            width: 1.5rem;
+            height: 0.2rem;
+            background: #cbd5e1;
+            transition: all 0.3s ease;
+            border-radius: 0.1rem;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(0.6rem);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-0.6rem);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 4rem;
+            width: 260px;
+            height: calc(100vh - 4rem);
+            background: #1a1f35;
+            border-right: 1px solid #334155;
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 30;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 0.875rem 1.5rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar a:hover {
+            background: rgba(37, 99, 235, 0.1);
+            color: #60a5fa;
+            border-left-color: #2563eb;
+        }
+
+        .sidebar a.active {
+            background: rgba(37, 99, 235, 0.2);
+            color: #60a5fa;
+            border-left-color: #2563eb;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 20;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Main Content */
+        .main-container {
+            display: flex;
+            margin-top: 4rem;
+            min-height: calc(100vh - 4rem);
+        }
+
+        @media (min-width: 768px) {
+            .main-container {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(0);
+            }
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                padding: 2rem;
+            }
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #475569;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #60a5fa;
+        }
+
+        /* Form Section */
+        .form-section {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 6rem;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #1d4ed8;
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+
+        /* Requests Section */
+        .requests-section {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .requests-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .request-card {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .request-card:hover {
+            border-color: #475569;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .request-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .request-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .request-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(234, 179, 8, 0.1);
+            color: #fbbf24;
+        }
+
+        .status-approved {
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+        }
+
+        .status-rejected {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+        }
+
+        .request-date {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+        }
+
+        .empty-state p {
+            margin-bottom: 1rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(0.625rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            animation: slideIn 0.3s ease-out;
+            z-index: 100;
+            max-width: 90%;
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.25rem 0;
+            display: none;
+            z-index: 60;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu .mobile-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .mobile-menu .mobile-link:hover {
+            background: rgba(37, 99, 235, 0.05);
+            color: #60a5fa;
+        }
+
+        .toast.success {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .toast {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .requests-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-container">
+                <div class="logo">📊</div>
+                <span class="logo-text">Campus Dashboard</span>
+            </a>
+            <div class="header-right">
+                <div class="user-info">
+                    <div class="user-name">Welcome, Student</div>
+                    <div class="user-role">Campus Management</div>
+                </div>
+                <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay for hamburger menu -->
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Mobile menu (appears when hamburger clicked) -->
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="dashboard.html" class="mobile-link">Dashboard</a>
+        <a href="helpdesk.html" class="mobile-link">Help Desk</a>
+        <a href="lostfound.html" class="mobile-link">Lost & Found</a>
+        <a href="timetable.html" class="mobile-link">Timetable</a>
+        <a href="materials.html" class="mobile-link">Materials</a>
+        <a href="attendance.html" class="mobile-link">Attendance</a>
+        <a href="info.html" class="mobile-link">Information</a>
+        <a href="#" class="mobile-link" onclick="logout(); return false;">Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <main>
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome to your campus management hub</p>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Requests</div>
+                    <div class="stat-value" id="totalStat">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value" id="pendingStat">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Approved</div>
+                    <div class="stat-value" id="approvedStat">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Rejected</div>
+                    <div class="stat-value" id="rejectedStat">0</div>
+                </div>
+            </div>
+
+            <!-- Submit Request Form -->
+            <div class="form-section">
+                <h2>Submit New Request</h2>
+                <form id="requestForm" onsubmit="submitRequest(event)">
+                    <div class="form-group">
+                        <label for="title">Request Title</label>
+                        <input type="text" id="title" name="title"
+                            placeholder="e.g., Room Maintenance, Library Access, etc." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description"
+                            placeholder="Provide details about your request..."></textarea>
+                    </div>
+
+                    <button type="submit">Submit Request</button>
+                    <div class="form-message" id="formMessage"></div>
+                </form>
+            </div>
+
+            <!-- My Requests Section -->
+            <div class="requests-section">
+                <h2>My Requests</h2>
+                <div class="requests-grid" id="requestsList">
+                    <div class="empty-state">
+                        <p>No requests submitted yet.</p>
+                        <p style="font-size: 0.75rem; color: #64748b;">Use the form above to submit your first request
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script>
+        // State Management
+        let currentPage = 'dashboard';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadRequests();
+        });
+
+        // Navigation
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (sidebar) sidebar.classList.toggle('active');
+            if (overlay) overlay.classList.toggle('active');
+            if (hamburger) hamburger.classList.toggle('active');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('active');
+                mobileMenu.setAttribute('aria-hidden', mobileMenu.classList.contains('active') ? 'false' : 'true');
+            }
+        }
+
+        function navigateTo(page) {
+            currentPage = page;
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            const el = document.querySelector(`[data-page="${page}"]`);
+            if (el) el.classList.add('active');
+            toggleMenu();
+            if (page !== 'dashboard') showToast(`Navigate to ${page} page (feature available in full app)`);
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            showToast('Logged out successfully');
+            setTimeout(() => window.location.href = '/pages/login.html', 800);
+        }
+
+        // Form Handler — post to backend
+        async function submitRequest(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value.trim();
+            const description = document.getElementById('description').value.trim();
+
+            if (!title) return showFormMessage('Please enter a request title', 'error');
+
+            const res = await apiPost('/api/student/request', { title, description });
+            if (!res) return showFormMessage('Network error', 'error');
+            showFormMessage(res.message || 'Submitted', 'success');
+            document.getElementById('requestForm').reset();
+            setTimeout(() => { loadStats(); loadRequests(); }, 600);
+        }
+
+        // Data Loading (backend)
+        async function loadStats() {
+            const data = await apiGet('/api/student/dashboard');
+            if (!data) return;
+            document.getElementById('totalStat').textContent = data.total_requests || 0;
+            document.getElementById('pendingStat').textContent = data.pending || 0;
+            document.getElementById('approvedStat').textContent = data.approved || 0;
+            document.getElementById('rejectedStat').textContent = data.rejected || 0;
+        }
+
+        async function loadRequests() {
+            const data = await apiGet('/api/student/requests');
+            const list = document.getElementById('requestsList');
+            if (!data || data.length === 0) {
+                list.innerHTML = `<div class="empty-state"><p>No requests submitted yet.</p><p style="font-size: 0.75rem; color: #64748b;">Use the form above to submit your first request</p></div>`;
+                return;
+            }
+            list.innerHTML = '';
+            data.forEach(request => list.appendChild(createRequestCard(request)));
+        }
+
+        function createRequestCard(request) {
+            const card = document.createElement('div');
+            card.className = 'request-card';
+
+            const date = new Date(request.date_submitted || request.createdAt || Date.now());
+            const formattedDate = date.toLocaleString();
+
+            const status = request.status || 'pending';
+            const statusClass = `status-${status}`;
+            const statusLabel = status.charAt(0).toUpperCase() + status.slice(1);
+
+            card.innerHTML = `
+                <div class="request-title">${escapeHtml(request.title)}</div>
+                ${request.description ? `<div class="request-description">${escapeHtml(request.description)}</div>` : ''}
+                <span class="request-status ${statusClass}">● ${statusLabel}</span>
+                <div class="request-date">Submitted on ${formattedDate}</div>
+            `;
+
+            return card;
+        }
+
+        // Utilities
+        function showFormMessage(message, type) {
+            const messageEl = document.getElementById('formMessage');
+            messageEl.textContent = message;
+            messageEl.className = `form-message ${type}`;
+            if (type === 'success') setTimeout(() => messageEl.className = 'form-message', 3000);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast success';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close sidebar when pressing Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar && sidebar.classList.contains('active')) toggleMenu();
+            }
+        });
+
+        // Ensure menu state is consistent on load and wire nav links to close menu before navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (sidebar) sidebar.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            if (hamburger) hamburger.classList.remove('active');
+            if (mobileMenu) mobileMenu.classList.remove('active');
+
+            // Wire mobile menu links to close menu when navigating
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#') return;
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        e.preventDefault();
+                        toggleMenu();
+                        setTimeout(() => { window.location.href = href; }, 200);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

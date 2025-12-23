@@ -1,0 +1,16 @@
+{
+  "name": "college-campus-app",
+  "version": "1.0.0",
+  "description": "College Campus Utility App",
+  "main": "index.html",
+  "scripts": {
+    "start": "cordova run android",
+    "build": "cordova build android"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "cordova": {
+    "plugins": [],
+    "platforms": ["android"]
+  }
+}

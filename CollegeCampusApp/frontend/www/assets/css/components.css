@@ -1,0 +1,62 @@
+/* frontend/www/assets/css/components.css */
+
+/* Buttons */
+button {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:active {
+    background-color: #1e40af; /* darker shade for click feedback */
+}
+
+/* Form elements */
+input, select, textarea {
+    font-size: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #2563eb;
+}
+
+/* Lists */
+.item, .issue {
+    background-color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+/* Headers */
+h1, h2, h3 {
+    font-weight: 600;
+}
+
+/* Labels */
+label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Section spacing */
+section {
+    margin-top: 12px;
+}
+
+/* Small text */
+small {
+    font-size: 12px;
+    color: #555;
+}
+
+/* Responsive images & media */
+img, video {
+    max-width: 100%;
+    border-radius: 4px;
+}

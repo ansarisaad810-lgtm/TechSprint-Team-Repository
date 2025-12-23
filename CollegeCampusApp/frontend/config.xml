@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.college.campusapp" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>CollegeCampusApp</name>
+    <description>College Campus Utility App</description>
+    <author email="youremail@example.com" href="https://example.com">Your Name</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="Fullscreen" value="true" />
+    <preference name="Orientation" value="portrait" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <allow-intent href="intent:*" />
+    </platform>
+</widget>

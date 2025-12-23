@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Study Materials</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: #1a1f35;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .logo-text {
+                display: inline;
+            }
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            background: #2563eb;
+            color: white;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        @media (min-width: 768px) {
+            main {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .page-intro {
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page-intro h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .page-intro h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        .page-intro p {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        /* Search and Filter */
+        .controls-section {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.75rem 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.625rem 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: #2563eb;
+            color: #60a5fa;
+        }
+
+        .filter-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        /* Materials Grid */
+        .materials-section {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .materials-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .material-card {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .material-card:hover {
+            border-color: #475569;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .material-icon {
+            width: 3rem;
+            height: 3rem;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .material-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .material-course {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #60a5fa;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .material-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .material-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+            margin-bottom: 1rem;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .material-type {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: #60a5fa;
+            padding: 0.25rem 0.625rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 0.625rem;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .upload-section h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            padding: 0.75rem 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 4rem;
+        }
+
+        .upload-btn {
+            padding: 0.75rem 1.5rem;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            background: #16a34a;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(0.625rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            animation: slideIn 0.3s ease-out;
+            z-index: 100;
+            max-width: 90%;
+        }
+
+        .toast.success {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .toast.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .toast {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-box input {
+                min-width: 100%;
+            }
+        }
+
+        /* Hamburger icon */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span {
+            width: 1.5rem;
+            height: 0.2rem;
+            background: #cbd5e1;
+            transition: all 0.3s ease;
+            border-radius: 0.1rem;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(0.6rem);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-0.6rem);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.25rem 0;
+            display: none;
+            z-index: 60;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu .mobile-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .mobile-menu .mobile-link:hover {
+            background: rgba(37, 99, 235, 0.05);
+            color: #60a5fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-container">
+                <div class="logo">📚</div>
+                <span class="logo-text">Campus Materials</span>
+            </a>
+            <div class="header-right">
+                <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="dashboard.html" class="mobile-link">Dashboard</a>
+        <a href="helpdesk.html" class="mobile-link">Help Desk</a>
+        <a href="lostfound.html" class="mobile-link">Lost & Found</a>
+        <a href="timetable.html" class="mobile-link">Timetable</a>
+        <a href="materials.html" class="mobile-link">Materials</a>
+        <a href="attendance.html" class="mobile-link">Attendance</a>
+        <a href="info.html" class="mobile-link">Information</a>
+        <a href="#" class="mobile-link" onclick="logout(); return false;">Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Page Intro -->
+        <div class="page-intro">
+            <h1>Study Materials</h1>
+            <p>Access course notes, assignments, and study resources</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <h3>📤 Share a Material</h3>
+            <form id="uploadForm" onsubmit="uploadMaterial(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="title">Material Title</label>
+                        <input type="text" id="title" name="title" placeholder="e.g., Data Structures Notes" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Course</label>
+                        <input type="text" id="course" name="course" placeholder="e.g., CS201" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description"
+                        placeholder="Brief description of the material..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="type">Material Type</label>
+                    <select id="type" name="type" required>
+                        <option value="Lecture Notes">Lecture Notes</option>
+                        <option value="Assignment">Assignment</option>
+                        <option value="Past Papers">Past Papers</option>
+                        <option value="Textbook">Textbook</option>
+                        <option value="Solution">Solution</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fileUpload">Upload File</label>
+                    <input type="file" id="fileUpload" name="fileUpload" accept=".pdf,.doc,.docx,.txt,.ppt,.pptx,.xlsx"
+                        required>
+                </div>
+
+                <button type="submit" class="upload-btn">Upload Material</button>
+            </form>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="controls-section">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search materials..." onkeyup="filterMaterials()">
+            </div>
+            <div class="filter-group">
+                <button class="filter-btn active" onclick="filterByType('All')">All</button>
+                <button class="filter-btn" onclick="filterByType('Lecture Notes')">📝 Notes</button>
+                <button class="filter-btn" onclick="filterByType('Assignment')">✏️ Assignment</button>
+                <button class="filter-btn" onclick="filterByType('Past Papers')">📄 Papers</button>
+                <button class="filter-btn" onclick="filterByType('Solution')">✓ Solutions</button>
+            </div>
+        </div>
+
+        <!-- Materials List -->
+        <div class="materials-section">
+            <h2>Available Materials</h2>
+            <div class="materials-grid" id="materialsList">
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <p>No materials yet. Upload your first material!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMenu() {
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (overlay) overlay.classList.toggle('active');
+            if (hamburger) hamburger.classList.toggle('active');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('active');
+                mobileMenu.setAttribute('aria-hidden', mobileMenu.classList.contains('active') ? 'false' : 'true');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (overlay) overlay.classList.remove('active');
+            if (hamburger) hamburger.classList.remove('active');
+            if (mobileMenu) mobileMenu.classList.remove('active');
+
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#') return;
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        e.preventDefault();
+                        toggleMenu();
+                        setTimeout(() => { window.location.href = href; }, 200);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/modules/materials.js"></script>
+</body>
+
+</html>

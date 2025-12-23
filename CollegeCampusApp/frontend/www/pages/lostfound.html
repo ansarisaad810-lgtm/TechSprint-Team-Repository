@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Lost & Found - Report Items</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: #1a1f35;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 4rem;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, #60a5fa, #2563eb);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .logo-text {
+                display: inline;
+            }
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .nav-button {
+            padding: 0.5rem 1rem;
+            background: #22c55e;
+            color: white;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-button:hover {
+            background: #16a34a;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 42rem;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        @media (min-width: 640px) {
+            main {
+                padding: 3rem 1.5rem;
+            }
+        }
+
+        .page-intro {
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .page-intro h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .page-intro h1 {
+                font-size: 2.25rem;
+            }
+        }
+
+        .page-intro p {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.3s ease-out;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (min-width: 640px) {
+            .form-card {
+                padding: 2rem;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            color: white;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #22c55e;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 6rem;
+        }
+
+        /* File Upload */
+        .file-upload-wrapper {
+            position: relative;
+        }
+
+        #media {
+            display: none;
+        }
+
+        .upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 2rem;
+            border: 2px dashed #334155;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: rgba(34, 197, 94, 0);
+        }
+
+        .upload-label:hover {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .upload-content {
+            text-align: center;
+        }
+
+        .upload-icon {
+            width: 2rem;
+            height: 2rem;
+            color: #64748b;
+            margin: 0 auto 0.5rem;
+            display: block;
+        }
+
+        .upload-label:hover .upload-icon {
+            color: #94a3b8;
+        }
+
+        .upload-text {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            margin-bottom: 0.25rem;
+        }
+
+        .upload-hint {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .file-name {
+            color: #22c55e;
+        }
+
+        /* Button */
+        button[type="submit"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: #16a34a;
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Items List */
+        .items-section {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .items-section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .items-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .item-card:hover {
+            border-color: #475569;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 12rem;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .item-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .item-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-date {
+            color: #64748b;
+            font-size: 0.75rem;
+        }
+
+        .status-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            display: inline-block;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(0.625rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Alert/Toast */
+        .toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: white;
+            animation: slideIn 0.3s ease-out;
+            z-index: 100;
+            max-width: 90%;
+        }
+
+        .toast.success {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .toast.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .toast {
+                top: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+        }
+
+        /* Menu Styles */
+        .menu-container {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 10;
+        }
+
+        .menu-trigger {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            color: #cbd5e1;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .menu-trigger:hover {
+            background: rgba(30, 41, 59, 0.8);
+            color: white;
+            border-color: #475569;
+        }
+
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            display: none;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+            animation: fadeIn 0.1s ease-out;
+        }
+
+        .menu-item {
+            padding: 0.75rem 1rem;
+            color: #e5e7eb;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            border: none;
+            background: none;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .item-card {
+            position: relative;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Hamburger icon */
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger span {
+            width: 1.5rem;
+            height: 0.2rem;
+            background: #cbd5e1;
+            transition: all 0.3s ease;
+            border-radius: 0.1rem;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(0.6rem);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-0.6rem);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 4rem;
+            right: 1rem;
+            background: #1a1f35;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.25rem 0;
+            display: none;
+            z-index: 60;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu .mobile-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .mobile-menu .mobile-link:hover {
+            background: rgba(37, 99, 235, 0.05);
+            color: #60a5fa;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-container">
+                <div class="logo">🔍</div>
+                <span class="logo-text">Campus Lost & Found</span>
+            </a>
+            <div class="header-right">
+                <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+    <nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+        <a href="dashboard.html" class="mobile-link">Dashboard</a>
+        <a href="helpdesk.html" class="mobile-link">Help Desk</a>
+        <a href="lostfound.html" class="mobile-link">Lost & Found</a>
+        <a href="timetable.html" class="mobile-link">Timetable</a>
+        <a href="materials.html" class="mobile-link">Materials</a>
+        <a href="attendance.html" class="mobile-link">Attendance</a>
+        <a href="info.html" class="mobile-link">Information</a>
+        <a href="#" class="mobile-link" onclick="logout(); return false;">Logout</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Page Intro -->
+        <div class="page-intro">
+            <h1>Report Found Item</h1>
+            <p>Help reunite lost items with their owners by reporting what you've found</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <form id="lostFoundForm">
+                <!-- Item Name -->
+                <div class="form-group">
+                    <label for="item_name">Item Name</label>
+                    <input type="text" id="item_name" name="item_name" placeholder="e.g., Blue Backpack, Phone, Keys"
+                        required>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description"
+                        placeholder="Describe the item in detail (color, brand, distinguishing features, etc.)..."></textarea>
+                </div>
+
+                <!-- Location Found -->
+                <div class="form-group">
+                    <label for="location">Where was it found?</label>
+                    <input type="text" id="location" name="location"
+                        placeholder="Location on campus (e.g., Library 2nd floor, Near Cafeteria)" required>
+                </div>
+
+                <!-- File Upload -->
+                <div class="form-group">
+                    <label>Upload Image</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="media" name="media" accept="image/*" required>
+                        <label for="media" class="upload-label">
+                            <div class="upload-content">
+                                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <p class="upload-text"><span id="fileNameDisplay">Click to upload or drag and
+                                        drop</span></p>
+                                <p class="upload-hint">PNG, JPG up to 50MB</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit">Report Found Item</button>
+            </form>
+        </div>
+
+        <!-- Items List -->
+        <div id="itemsContainer" class="items-section" style="display: none;">
+            <h2>Found Items (<span id="itemCount">0</span>)</h2>
+            <div id="itemsList" class="items-list"></div>
+        </div>
+    </main>
+
+    <script>
+        // Mobile menu toggle (same behavior as dashboard/helpdesk)
+        function toggleMenu() {
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (overlay) overlay.classList.toggle('active');
+            if (hamburger) hamburger.classList.toggle('active');
+            if (mobileMenu) {
+                mobileMenu.classList.toggle('active');
+                mobileMenu.setAttribute('aria-hidden', mobileMenu.classList.contains('active') ? 'false' : 'true');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const overlay = document.getElementById('overlay');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (overlay) overlay.classList.remove('active');
+            if (hamburger) hamburger.classList.remove('active');
+            if (mobileMenu) mobileMenu.classList.remove('active');
+
+            document.querySelectorAll('.mobile-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const href = link.getAttribute('href');
+                    if (!href || href === '#') return;
+                    if (mobileMenu && mobileMenu.classList.contains('active')) {
+                        e.preventDefault();
+                        toggleMenu();
+                        setTimeout(() => { window.location.href = href; }, 200);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/modules/lostfound.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+/* frontend/www/assets/css/dashboard.css */
+
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+}
+
+.dashboard-container button {
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+}
